@@ -1,0 +1,12 @@
+main: com.ar.askgaming.warzone.Main
+name: Warzone
+api-version: 1.20
+version: 0.1
+author: AMONLY
+softdepend: [PlaceholderAPI]
+commands:
+  dragon:
+    aliases: [warzone]
+    description: Manage warzone mode in your server.
+    permission: warzone.commands
+    permission-message: You do not have permission to use this command.

@@ -1,7 +1,11 @@
 package com.ar.askgaming.warzone;
 
 
-public class Main
-{
+public class Main extends JavaPlugin{
 
+    public void onEnable() {
+
+        
+
+    }
 }
