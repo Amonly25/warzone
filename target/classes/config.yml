@@ -2,14 +2,77 @@
 
 location: 
 
-messages:
-  start: "&cThe warzone has started."
-  end: "&cThe warzone has ended."
-  warp: "&cYou will be teleport in the 3 seconds"
-  enter: "&cYou are in the warzone now"
-  no_permission: "&cYou have no permission to do that."
-  cant_move: "&cYou cant move before the teleport."
+name: "Warzone Boss"
+health: 200
+damage_multiplier: 1.3
 
-start:
-  title: "&cWarzone"
-  subtitle: "&7has started!"
+remove_star_drops: true
+
+abilities:
+  lightning:
+    chance: 0.3
+    super_lightning: true
+    msg_to_player: "&5Dragon: &7You cant against my power"
+    #commands:
+    #- maybe a espetacular command?
+  dodge:
+    chance: 1.0
+    msg_to_player: "&5Dragon: &7You failed, you are worth nothing"
+    block_damage: true
+    sounds:
+    - ITEM_SHIELD_BLOCK
+  impulse:
+    chance: 0.3
+    msg_to_player: "&5Dragon: &7Agggggrhh"
+    knockback_power: 3
+    damage_player: 10
+    sounds:
+    - ENTITY_ENDER_DRAGON_GROWL
+    - ENTITY_PLAYER_ATTACK_SWEEP
+  explosion:
+    chance: 0.3
+    msg_to_player: "&5Dragon: &7Dieeeeee!!"  
+    make_explosion: true
+    sounds:
+    - ENTITY_ENDER_DRAGON_GROWL
+  custom1: # Why not create your own ability?
+    # You can add any config type here only chance is required 
+    chance: 0.0
+    msg_to_player: "&5Dragon: &7Custom message"  
+    commands:
+    - eco add %player% 1
+    - give %player% arrow 1
+    #-any awesome command
+    sounds:
+    - ENTITY_ENDER_DRAGON_GROWL
+    block_damage: true
+    knockback_power: 3
+    damage_player: 10
+    create_explosion: true
+    super_lightning: true
+    effects:
+     - NAUSEA:60:0
+
+rewards:
+  1:
+    chance: 1.0
+    broadcast_text: ""
+    drops: 
+    - ENDER_EYE
+    - BONE
+    commands: 
+    - eco give %player% 100
+    - give %player% diamond 4
+  2:
+    chance: 0.50
+    broadcast_text: ""
+    drops: 
+    - BONE
+    commands: 
+    - eco give %player% 100
+    - give %player% emerald 4
+  3:
+    chance: 0.0
+    broadcast_text: "Example: 0%"
+    drops: 
+    - DIAMOND 
