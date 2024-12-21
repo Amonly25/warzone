@@ -42,7 +42,7 @@ public class EntityDamageListener implements Listener{
             if (witherBoss == null) {
                 return;
             }
-            if (damager.equals(boss)){
+            if (damager.equals(witherBoss)){
                 if (e.getEntity() instanceof Player) {
                     double dmg = e.getDamage();
                     int multiply = plugin.getConfig().getInt("damage_multiplier");

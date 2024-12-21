@@ -58,7 +58,7 @@ public class WarzoneBoss {
         }
        
     }
-        public void createCounterAttack(EntityDamageByEntityEvent event, Player damager) {
+    public void createCounterAttack(EntityDamageByEntityEvent event, Player damager) {
 
         FileConfiguration config = plugin.getConfig();
         String ability = getRandom();

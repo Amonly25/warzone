@@ -1,5 +1,7 @@
 package com.ar.askgaming.warzone.Warzone;
 
+import java.util.Optional;
+
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -14,7 +16,7 @@ public class Warzone extends BukkitRunnable{
         this.location = location;
 
         location.getWorld().setTime(14000);
-        runTaskTimer(main, 0, 10);
+        runTaskTimer(main, 0, 20);
 
         boss = new WarzoneBoss(main, location);
     }
@@ -29,7 +31,12 @@ public class Warzone extends BukkitRunnable{
     }
     @Override
     public void run() {
-        Location strikeLocation = location.clone().add((Math.random() - 0.5) * 64, 0, (Math.random() - 0.5) * 64);
+        Location loc = Optional.ofNullable(boss.getWhiter().getLocation()).orElse(location);
+        if (loc == null) {
+            return;
+        }
+
+        Location strikeLocation = loc.clone().add((Math.random() - 0.5) * 64, 0, (Math.random() - 0.5) * 64);
         location.getWorld().strikeLightningEffect(strikeLocation);
     }
     

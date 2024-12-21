@@ -1,6 +1,6 @@
-main: com.ar.askgaming.warzone.Main
+main: com.ar.askgaming.warzone.WarzonePlugin
 name: Warzone
-api-version: 1.17
+api-version: 1.21
 version: 1.4
 author: AMONLY
 softdepend: [PlaceholderAPI]

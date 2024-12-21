@@ -1,12 +1,15 @@
 
-start: "&cThe warzone has started."
-stop: "&cThe warzone has ended."
 warp: "&cYou will be teleport in the 3 seconds"
 enter: "&cYou are in the warzone now"
-
 no_permission: "&cYou have no permission to do that."
 cant_move: "&cYou cant move before the teleport."
 
 start:
+  message: "&cThe warzone has started."
   title: "&cWarzone"
   subtitle: "&7has started!"
+
+stop:
+  message: "&cThe warzone has ended."
+  title: "&cWarzone"
+  subtitle: "&7has ended!"

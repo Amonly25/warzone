@@ -45,11 +45,10 @@ public class EntityDeathListener implements Listener{
             if (witherBoss == null) {
                 return;
             }
-            if (!entity.equals(boss)){
+            if (!entity.equals(witherBoss)){
                 return;
             }
-            Wither wither = (Wither) entity;
-
+            plugin.getWarzoneManager().stop();
             if (e.getEntity().getKiller() instanceof Player) {	
                 
                 // Set Dragon killes

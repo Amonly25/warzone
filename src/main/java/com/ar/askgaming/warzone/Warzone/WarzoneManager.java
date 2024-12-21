@@ -23,7 +23,7 @@ public class WarzoneManager {
         //Methods
     public void start(){
         warzone = new Warzone(plugin, location);
-        plugin.getLang().langBroadcast("start");
+        plugin.getLang().langBroadcast("start.message");
 
         for (Player p : Bukkit.getOnlinePlayers()){
             String title = plugin.getLang().getLang("start.title", p);
@@ -41,18 +41,24 @@ public class WarzoneManager {
         if (warzone.getBoss().getWhiter() != null && !warzone.getBoss().getWhiter().isDead()){
             warzone.getBoss().getWhiter().remove();
         }
+        for (Player p : Bukkit.getOnlinePlayers()){
+            String title = plugin.getLang().getLang("stop.title", p);
+            String subtitle = plugin.getLang().getLang("stop.subtitle", p);
+            p.sendTitle(title, subtitle, 20, 40, 20);
+        }
         WarzoneEndEvent event = new WarzoneEndEvent(warzone);
         Bukkit.getPluginManager().callEvent(event);
+        warzone.cancel();
         warzone = null;
-        warzone.getLocation().getWorld().setTime(0);
-        plugin.getLang().langBroadcast("stop");
+        location.getWorld().setTime(0);
+        plugin.getLang().langBroadcast("stop.message");
 
     }
 
     public void warp(Player p){
 
         final int z = p.getLocation().getBlockZ(), x = p.getLocation().getBlockX();
-        plugin.getLang().getLang("warp", p);
+        p.sendMessage(plugin.getLang().getLang("warp",p));
 
         new BukkitRunnable() {		
             int count = 3;
@@ -62,7 +68,7 @@ public class WarzoneManager {
                 
                 if (count == 0) {  
                     p.sendMessage(plugin.getLang().getLang("enter",p));
-                    p.teleport(warzone.getLocation());        		
+                    p.teleport(location);        		
                     cancel(); 
                     return;
                 }	    	    	                                    	    	                        
