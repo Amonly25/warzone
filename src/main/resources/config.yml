@@ -1,3 +1,7 @@
+# Abilites: When you attack the boss, a random skill will be used, configute it individually
+# Possible sounds https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+# Possible effects https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html
+
 #Dont touch the location from here, do it manually by commands.
 
 location: 
@@ -6,24 +10,26 @@ name: "Warzone Boss"
 health: 200
 damage_multiplier: 1.3
 
+automatic_start: true
+cooldown_in_minutes: 1440
 remove_star_drops: true
 
 abilities:
   lightning:
     chance: 0.3
     super_lightning: true
-    msg_to_player: "&5Dragon: &7You cant against my power"
+    msg_to_player: "&cWarzone Boss: &7You cant against my power"
     #commands:
     #- maybe a espetacular command?
   dodge:
     chance: 1.0
-    msg_to_player: "&5Dragon: &7You failed, you are worth nothing"
+    msg_to_player: "&cWarzone Boss: &7You failed, you are worth nothing"
     block_damage: true
     sounds:
     - ITEM_SHIELD_BLOCK
   impulse:
     chance: 0.3
-    msg_to_player: "&5Dragon: &7Agggggrhh"
+    msg_to_player: "&cWarzone Boss: &7Agggggrhh"
     knockback_power: 3
     damage_player: 10
     sounds:
@@ -31,14 +37,14 @@ abilities:
     - ENTITY_PLAYER_ATTACK_SWEEP
   explosion:
     chance: 0.3
-    msg_to_player: "&5Dragon: &7Dieeeeee!!"  
+    msg_to_player: "&cWarzone Boss: &7Dieeeeee!!"  
     make_explosion: true
     sounds:
     - ENTITY_ENDER_DRAGON_GROWL
   custom1: # Why not create your own ability?
     # You can add any config type here only chance is required 
     chance: 0.0
-    msg_to_player: "&5Dragon: &7Custom message"  
+    msg_to_player: "&cWarzone Boss: &7Custom message"  
     commands:
     - eco add %player% 1
     - give %player% arrow 1
@@ -58,7 +64,6 @@ rewards:
     chance: 1.0
     broadcast_text: ""
     drops: 
-    - ENDER_EYE
     - BONE
     commands: 
     - eco give %player% 100

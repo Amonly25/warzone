@@ -1,8 +1,9 @@
 
-warp: "&cYou will be teleport in the 3 seconds"
+warp: "&cYou will be teleport in 3 seconds"
 enter: "&cYou are in the warzone now"
 no_permission: "&cYou have no permission to do that."
 cant_move: "&cYou cant move before the teleport."
+next: "&7%hours% hours and %min% minutes"
 
 start:
   message: "&cThe warzone has started."

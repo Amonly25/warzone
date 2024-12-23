@@ -36,7 +36,7 @@ public class Commands implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (args.length == 0) {
-            sender.sendMessage("Use /warzone <subcommand>");
+            sender.sendMessage("Use /warzone <help>");
             return true;
         }
         if (!(sender instanceof Player)){
@@ -68,7 +68,7 @@ public class Commands implements TabExecutor {
     private void warp(Player p){
 
         if (plugin.getWarzoneManager().getLocation() == null){
-            p.sendMessage("The warzone location is not seted correctly");
+            p.sendMessage("§cThe warzone location is not seted correctly");
             return;
         }
 
@@ -81,12 +81,12 @@ public class Commands implements TabExecutor {
     private void set(Player p,String[] args){
         Location loc = p.getLocation();
         plugin.getWarzoneManager().setLocation(loc);
-        p.sendMessage("You set the warzone location");
+        p.sendMessage("§cYou set the warzone location");
     }
 
     private void start(Player p, String[] args){
         if (plugin.getWarzoneManager().getLocation() == null){
-            p.sendMessage("The warzone location is not seted yet");
+            p.sendMessage("§cThe warzone location is not seted yet");
             return;
 
         }
@@ -94,7 +94,7 @@ public class Commands implements TabExecutor {
     }
     private void stop(Player p, String[] args){
         if (plugin.getWarzoneManager().getWarzone() == null){
-            p.sendMessage("The warzone is not in progress");
+            p.sendMessage("§cThe warzone is not in progress");
             return;
         }
 

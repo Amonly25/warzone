@@ -4,13 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wither;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.ar.askgaming.warzone.WarzonePlugin;
 import com.ar.askgaming.warzone.CustomEvents.WarzoneEndEvent;
 import com.ar.askgaming.warzone.CustomEvents.WarzoneStartEvent;
 
-public class WarzoneManager {
+public class WarzoneManager extends BukkitRunnable{
 
     private WarzonePlugin plugin;
     private Warzone warzone;
@@ -19,9 +20,16 @@ public class WarzoneManager {
     public WarzoneManager(WarzonePlugin main){
         plugin = main;
         location = plugin.getConfig().getLocation("location");
+
+        runTaskTimer(main, 0, 20*60);
     }
         //Methods
     public void start(){
+
+        if (warzone != null){
+            return;
+        }
+
         warzone = new Warzone(plugin, location);
         plugin.getLang().langBroadcast("start.message");
 
@@ -48,6 +56,8 @@ public class WarzoneManager {
         }
         WarzoneEndEvent event = new WarzoneEndEvent(warzone);
         Bukkit.getPluginManager().callEvent(event);
+        plugin.getConfig().set("last_warzone", System.currentTimeMillis() / 60000);
+        plugin.saveConfig();
         warzone.cancel();
         warzone = null;
         location.getWorld().setTime(0);
@@ -92,5 +102,60 @@ public class WarzoneManager {
         plugin.saveConfig();
         this.location = location;
     }
+    @Override
+    public void run() {
 
+        if (getWarzone() == null){
+            return;
+        }
+
+        if (getLocation() == null){
+            return;
+        }
+        if (!plugin.getConfig().getBoolean("automatic_respawn", true)) {
+            return;
+        }
+                
+        long actualTime = System.currentTimeMillis() / 60000;
+		long lastWarzone = plugin.getConfig().getLong("last_warzone",0);
+
+        long respawnTime = plugin.getConfig().getLong("cooldown_in_minutes",1140);
+
+        if ((actualTime - lastWarzone) >= respawnTime) {
+            start();          
+        }
+    }
+    public String getNext() {
+        long actualTime = System.currentTimeMillis() / 60000;
+        long lastWarzone = plugin.getConfig().getLong("last_warzone",0);
+        long respawnTime = plugin.getConfig().getLong("cooldown_in_minutes",1440);
+        long time = respawnTime - (actualTime - lastWarzone);
+
+        if (time < 0) {time = 0;}
+
+        long hours = time / 60;
+        long minutes = time % 60;
+        String text = plugin.getLang().getLang("next", null).replace("%hours%", String.valueOf(hours)).replace("%min%", String.valueOf(minutes));
+    
+        return text;
+
+    }
+
+    public Wither getWarzoneBoss() {
+        Warzone warzone = plugin.getWarzoneManager().getWarzone();
+        if (warzone == null) {
+            return null;
+        }
+
+        WarzoneBoss boss = warzone.getBoss();
+        if (boss == null) {
+            return null;
+        }
+
+        Wither witherBoss = boss.getWhiter();
+        if (witherBoss == null) {
+            return null;
+        }
+        return witherBoss;
+    }
 }

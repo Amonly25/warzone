@@ -49,6 +49,8 @@ public class EntityDamageListener implements Listener{
                     if (multiply > 1) {
                         e.setDamage(dmg*multiply);
                     }
+               } else {
+                    e.setCancelled(true);
                }
             }
             return;
@@ -71,7 +73,7 @@ public class EntityDamageListener implements Listener{
             if (witherBoss == null) {
                 return;
             }
-            if (!entity.equals(boss)){
+            if (!entity.equals(witherBoss)){
                 return;
             }
 
