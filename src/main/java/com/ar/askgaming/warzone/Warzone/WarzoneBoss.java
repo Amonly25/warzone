@@ -9,6 +9,8 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -70,6 +72,8 @@ public class WarzoneBoss {
 
         double random = Math.random();
 
+        Entity wither = event.getEntity();
+
         if (skillChance >= random) {
 
             if (!skillMessage.equals("")) {
@@ -95,9 +99,31 @@ public class WarzoneBoss {
                 damager.damage(damage);
             }
 
-            boolean explosion = config.getBoolean("abilities." + name + ".explosion",false);
+            boolean explosion = config.getBoolean("abilities." + name + ".create_explosion",false);
             if (explosion) {
                 damager.getWorld().createExplosion(damager.getLocation(), 5, true);
+            }
+
+            boolean vexing = config.getBoolean("abilities." + name + ".vexing.enabled",false);
+            int vexCount = config.getInt("abilities." + name + ".vexing.amount",3);
+            double locRandom = config.getDouble("abilities." + name + ".vexing.radio",10);
+            if (vexing) {
+                for (int i = 0; i < vexCount; i++) {
+                    Location loc = wither.getLocation().clone();
+                    loc.add((Math.random() - 0.5) * locRandom, 0, (Math.random() - 0.5) * locRandom);
+                    damager.getWorld().spawnEntity(loc, EntityType.VEX);
+                }
+            }
+
+            boolean skeletons = config.getBoolean("abilities." + name + ".skeletons.enabled",false);
+            int skeletonCount = config.getInt("abilities." + name + ".skeletons.amount",3);
+            double skeletonRandom = config.getDouble("abilities." + name + ".skeletons.radio",10);
+            if (skeletons) {
+                for (int i = 0; i < skeletonCount; i++) {
+                    Location loc = wither.getLocation().clone();
+                    loc.add((Math.random() - 0.5) * skeletonRandom, 0, (Math.random() - 0.5) * skeletonRandom);
+                    damager.getWorld().spawnEntity(loc, EntityType.WITHER_SKELETON);
+                }
             }
             
             playSoundIfExist(name, damager);  
@@ -141,8 +167,8 @@ public class WarzoneBoss {
 
                     damager.addPotionEffect(new PotionEffect(type, duration, amplifier));
                 } catch (Exception e) {
-                    plugin.getLogger().warning("Wrong potion effect format: " + effect);
-                    e.printStackTrace();
+                    plugin.getLogger().warning("Wrong potion effect format or type: " + effect);
+                    
                 }
             }
         }

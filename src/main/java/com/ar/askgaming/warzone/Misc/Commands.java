@@ -104,7 +104,6 @@ public class Commands implements TabExecutor {
         p.sendMessage("Warzone commands:");
         p.sendMessage("/warzone set - Set the warzone location");
         p.sendMessage("/warzone warp - Warp to the warzone");
-        p.sendMessage("/warzone spawn - Spawn the boss");
         p.sendMessage("/warzone start - Start the warzone");
         p.sendMessage("/warzone stop - Stop the warzone");
 

@@ -105,7 +105,7 @@ public class WarzoneManager extends BukkitRunnable{
     @Override
     public void run() {
 
-        if (getWarzone() == null){
+        if (getWarzone() != null){
             return;
         }
 

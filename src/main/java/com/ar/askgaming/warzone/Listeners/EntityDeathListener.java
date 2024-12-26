@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
+import org.bukkit.entity.WitherSkeleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -30,6 +31,21 @@ public class EntityDeathListener implements Listener{
     @EventHandler()
     public void onEntityDeath(EntityDeathEvent e){
         Entity entity = e.getEntity();
+        if (entity instanceof WitherSkeleton) {
+            Warzone warzone = plugin.getWarzoneManager().getWarzone();
+            if (warzone == null) {
+                return;
+            }
+            WarzoneBoss boss = warzone.getBoss();
+            if (boss == null) {
+                return;
+            }
+            if (plugin.getConfig().getBoolean("remove_wither_skeleton_drops_on_warzone", true)){
+                e.getDrops().clear();
+                return;
+            }
+
+        }
         if (entity instanceof Wither) {
             Warzone warzone = plugin.getWarzoneManager().getWarzone();
             if (warzone == null) {
@@ -59,7 +75,7 @@ public class EntityDeathListener implements Listener{
                 //Handling drops
                 double chance = Math.random();
 
-                if (cfg.getBoolean("remove_star_drops")){
+                if (cfg.getBoolean("remove_star_drop_from_boss", true)){
                     e.getDrops().clear();
                 }
                 //Handling rewards
