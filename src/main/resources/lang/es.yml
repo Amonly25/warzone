@@ -3,6 +3,7 @@ enter: "&cAhora estás en la zona de guerra"
 no_permission: "&cNo tienes permiso para hacer eso."
 cant_move: "&cNo puedes moverte antes de la teletransportación."
 next: "&7%hours% horas y %min% minutos"
+status: "&cLa zona de guerra está %status%."
 
 start:
   message: "&cLa zona de guerra ha comenzado."

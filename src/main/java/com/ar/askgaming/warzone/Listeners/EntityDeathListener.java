@@ -72,34 +72,12 @@ public class EntityDeathListener implements Listener{
 
                 FileConfiguration cfg = plugin.getConfig();
 
-                //Handling drops
-                double chance = Math.random();
-
                 if (cfg.getBoolean("remove_star_drop_from_boss", true)){
                     e.getDrops().clear();
                 }
                 //Handling rewards
 
-                for (String key : cfg.getConfigurationSection("rewards").getKeys(false)){
-					
-				    String txt = cfg.getString("rewards." + key + ".broadcast_text");
-				    List<String> drop = cfg.getStringList("rewards." + key + ".drops");
-				    List<String> commands = cfg.getStringList("rewards." + key + ".commands");
-				    				    
-				    if (cfg.getDouble("rewards." + key + ".chance") >= chance) {
-				    					    
-				    	if (!txt.equals("")){ 
-						    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', txt));
-				    	}
-				    	for (String item : drop) {
-				    		e.getDrops().add(new ItemStack(Material.valueOf(item)));
-				    	}
-					    
-						for (String s : commands) {						
-							Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), s.replaceAll("%player%", p.getName()));
-						}
-				    }
-				}
+                plugin.getWarzoneManager().proccesRewards(p, witherBoss.getLocation());
             }
         }
     }

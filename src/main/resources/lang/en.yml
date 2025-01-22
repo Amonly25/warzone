@@ -4,6 +4,7 @@ enter: "&cYou are in the warzone now."
 no_permission: "&cYou have no permission to do that."
 cant_move: "&cYou cant move before the teleport."
 next: "&7%hours% hours and %min% minutes."
+status: "&cThe warzone is %status%."
 
 start:
   message: "&cThe warzone has started."

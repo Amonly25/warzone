@@ -2,6 +2,8 @@ com\ar\askgaming\warzone\CustomEvents\WarzoneStartEvent.class
 com\ar\askgaming\warzone\Misc\LangManager.class
 com\ar\askgaming\warzone\Warzone\WarzoneBoss.class
 com\ar\askgaming\warzone\Warzone\WarzoneManager$1.class
+com\ar\askgaming\warzone\Events\WarzoneStartEvent.class
+com\ar\askgaming\warzone\Commands.class
 com\ar\askgaming\warzone\Listeners\EntityTargetListener.class
 com\ar\askgaming\warzone\Misc\PlaceHolderHook.class
 com\ar\askgaming\warzone\CustomEvents\WarzoneEndEvent.class
@@ -10,4 +12,3 @@ com\ar\askgaming\warzone\Listeners\EntityDeathListener.class
 com\ar\askgaming\warzone\Warzone\Warzone.class
 com\ar\askgaming\warzone\WarzonePlugin.class
 com\ar\askgaming\warzone\Warzone\WarzoneManager.class
-com\ar\askgaming\warzone\Misc\Commands.class
