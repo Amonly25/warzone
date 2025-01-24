@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.ar.askgaming.warzone.WarzonePlugin;
-import com.ar.askgaming.warzone.CustomEvents.WarzoneEndEvent;
 import com.ar.askgaming.warzone.CustomEvents.WarzoneStartEvent;
 
 import net.md_5.bungee.api.ChatColor;
@@ -38,7 +37,8 @@ public class WarzoneManager extends BukkitRunnable{
         }
 
         warzone = new Warzone(plugin, location);
-        WarzoneStartEvent event = new WarzoneStartEvent(warzone);
+        WarzoneStartEvent event = plugin.getWarzoneStartEvent();
+        event.setWarzone(warzone);
         Bukkit.getPluginManager().callEvent(event);
 
         plugin.getLang().langBroadcast("start.message");
@@ -62,8 +62,7 @@ public class WarzoneManager extends BukkitRunnable{
             String subtitle = plugin.getLang().getLang("stop.subtitle", p);
             p.sendTitle(title, subtitle, 20, 40, 20);
         }
-        WarzoneEndEvent event = new WarzoneEndEvent(warzone);
-        Bukkit.getPluginManager().callEvent(event);
+
         plugin.getConfig().set("last_warzone", System.currentTimeMillis() / 60000);
         plugin.saveConfig();
         warzone.cancel();

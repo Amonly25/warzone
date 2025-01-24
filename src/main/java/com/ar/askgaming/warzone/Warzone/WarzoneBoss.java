@@ -56,7 +56,7 @@ public class WarzoneBoss {
         }
         for (String key : abilities.getKeys(false)) {
             this.abilities.add(key);
-            Bukkit.getLogger().info("Ability: " + key);
+           // Bukkit.getLogger().info("Ability: " + key);
         }
        
     }

@@ -98,6 +98,10 @@ public class Commands implements TabExecutor {
             return;
 
         }
+        if (plugin.getWarzoneManager().getWarzone() != null){
+            p.sendMessage("§cThe warzone is already in progress");
+            return;
+        }
         plugin.getWarzoneManager().start();
     }
     private void stop(Player p, String[] args){

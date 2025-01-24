@@ -7,16 +7,24 @@ import com.ar.askgaming.warzone.Warzone.Warzone;
 
 public class WarzoneStartEvent extends Event {
 
+    private static final HandlerList HANDLERS = new HandlerList();
 
-    private HandlerList handlers = new HandlerList();
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
+        return HANDLERS;
     }
+    
     private Warzone warzone;
-    public WarzoneStartEvent(Warzone warzone) {
+    public void setWarzone(Warzone warzone) {
         this.warzone = warzone;
+    }
+
+    public WarzoneStartEvent() {
+
     }
     public Warzone getWarzone() {
         return warzone;
