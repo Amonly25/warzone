@@ -54,6 +54,10 @@ public class WarzoneManager extends BukkitRunnable{
 
     public void stop(){
 
+        if (warzone == null){
+            return;
+        }
+        
         if (warzone.getBoss().getWhiter() != null && !warzone.getBoss().getWhiter().isDead()){
             warzone.getBoss().getWhiter().remove();
         }
