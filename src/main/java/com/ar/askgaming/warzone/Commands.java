@@ -24,7 +24,7 @@ public class Commands implements TabExecutor {
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         
         if (args.length == 1) {
-            return List.of("set","warp","start","stop","status","add_custom_drop","test_rewards");
+            return List.of("set","warp","start","stop","status","add_custom_drop","test_rewards","reload","help");
         }
 
         return null;
@@ -65,6 +65,10 @@ public class Commands implements TabExecutor {
                 break;
             case "test_rewards":
                 testRewards(player, args);
+                break;
+            case "reload":
+                plugin.reloadConfig();
+                player.sendMessage("Config reloaded");
                 break;
             case "help":
             default:
