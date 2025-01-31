@@ -31,6 +31,9 @@ public class Warzone extends BukkitRunnable{
     }
     @Override
     public void run() {
+        if (boss == null || boss.getWhiter() == null || boss.getWhiter().isDead()) {
+            return;
+        }
         Location loc = Optional.ofNullable(boss.getWhiter().getLocation()).orElse(location);
         if (loc == null) {
             return;

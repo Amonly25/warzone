@@ -39,15 +39,20 @@ public class WarzoneBoss {
 
         FileConfiguration conf = main.getConfig();
 
-        name = conf.getString("name");
-        health = conf.getDouble("health");
+        name = conf.getString("name","Warzone Boss");
+        health = conf.getDouble("health",1024.0);
 
         whiter = loc.getWorld().spawn(loc, Wither.class);
         whiter.setCustomName(name);
         whiter.setCustomNameVisible(true);
 
         whiter.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
-        whiter.setHealth(health);
+        try {
+            whiter.setHealth(health);
+        } catch (Exception e) {
+            main.getLogger().warning("Error setting health to wither");
+            main.getLogger().info(e.getMessage());
+        }
 
         ConfigurationSection abilities = main.getConfig().getConfigurationSection("abilities");
         if (abilities == null) {
