@@ -32,7 +32,7 @@ public class EntityTargetListener implements Listener{
             return;
         }
     
-        if (entity instanceof Wither) {
+        if (entity instanceof Wither && isWarzoneBoss(entity)) {
             handleWitherTargeting(e, targeted, entity);
         }
     }
