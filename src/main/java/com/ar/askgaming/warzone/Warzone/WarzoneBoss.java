@@ -1,9 +1,10 @@
 package com.ar.askgaming.warzone.Warzone;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -16,7 +17,6 @@ import org.bukkit.entity.Wither;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.joml.Random;
 
 import com.ar.askgaming.warzone.WarzonePlugin;
 
@@ -168,7 +168,20 @@ public class WarzoneBoss {
                 try {
                     int duration = Integer.parseInt(split[1]);
                     int amplifier = Integer.parseInt(split[2]);
-                    PotionEffectType type = org.bukkit.Registry.EFFECT.match(split[0].toUpperCase()); // Check if the effect is in the
+                    PotionEffectType type;
+
+                    try {
+                        // Para versiones 1.19+ (incluye 1.21.4)
+                        type = (PotionEffectType) PotionEffectType.class.getMethod("match", String.class).invoke(null, split[0].toUpperCase());
+                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                        // Para versiones anteriores como 1.18
+                        type = PotionEffectType.getByName(split[0].toUpperCase());
+                    }
+
+                    if (type == null) {
+                        plugin.getLogger().warning("Wrong potion effect format or type: " + effect);
+                        return;
+                    }
 
                     damager.addPotionEffect(new PotionEffect(type, duration, amplifier));
                 } catch (Exception e) {

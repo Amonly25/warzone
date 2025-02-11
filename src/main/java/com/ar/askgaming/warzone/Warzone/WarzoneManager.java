@@ -1,6 +1,7 @@
 package com.ar.askgaming.warzone.Warzone;
 
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -47,7 +48,8 @@ public class WarzoneManager extends BukkitRunnable{
             String title = plugin.getLang().getLang("start.title", p);
             String subtitle = plugin.getLang().getLang("start.subtitle", p);
             p.sendTitle(title, subtitle, 20, 40, 20);
-            p.playSound(p, Sound.ENTITY_WITHER_SPAWN, 10, 1);
+            //p.playSound(p, Sound.ENTITY_WITHER_SPAWN, 10, 1);
+            p.playSound(p.getLocation(), Sound.ENTITY_WITHER_SPAWN, 10, 1);
         }
 
     }
@@ -175,13 +177,15 @@ public class WarzoneManager extends BukkitRunnable{
 
         double chance = Math.random();
 
-        for (String key : cfg.getConfigurationSection("custom_drops").getKeys(false)){
-            ItemStack item = plugin.getConfig().getItemStack("custom_drops." + key + ".item");
+        Set<String> keys = cfg.getConfigurationSection("custom_drops").getKeys(false);
+        for (String key : keys){
+            ItemStack item = cfg.getItemStack("custom_drops." + key + ".item");
             String text = cfg.getString("custom_drops." + key + ".broadcast_text");
-            if (!text.equals("")) {
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', text));
-            }
+  
             if (item != null && cfg.getDouble("custom_drops." + key + ".chance") >= chance) {
+                if (!text.equals("")) {
+                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', text));
+                }
                 loc.getWorld().dropItemNaturally(loc, item);
             }
         }
