@@ -125,5 +125,5 @@ custom_drops:
       ==: org.bukkit.inventory.ItemStack
       v: 4189
       type: BOW
-    chance: 0.5
+    chance: 1.0
     broadcast_text: 'Something special has been dropped'

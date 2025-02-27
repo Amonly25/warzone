@@ -181,12 +181,15 @@ public class WarzoneManager extends BukkitRunnable{
         for (String key : keys){
             ItemStack item = cfg.getItemStack("custom_drops." + key + ".item");
             String text = cfg.getString("custom_drops." + key + ".broadcast_text");
-  
-            if (item != null && cfg.getDouble("custom_drops." + key + ".chance") >= chance) {
+            plugin.getLogger().info("chance: " + cfg.getDouble("custom_drops." + key + ".chance") + " >= " + chance);
+            if (cfg.getDouble("custom_drops." + key + ".chance") >= chance) {
+                
                 if (!text.equals("")) {
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', text));
                 }
-                loc.getWorld().dropItemNaturally(loc, item);
+                if (item != null) {
+                    loc.getWorld().dropItem(loc, item);
+                }
             }
         }
 
