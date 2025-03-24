@@ -19,11 +19,9 @@ public class WarzoneStartEvent extends Event {
     }
     
     private Warzone warzone;
-    public void setWarzone(Warzone warzone) {
-        this.warzone = warzone;
-    }
 
-    public WarzoneStartEvent() {
+    public WarzoneStartEvent(Warzone warzone) {
+        this.warzone = warzone;
 
     }
     public Warzone getWarzone() {

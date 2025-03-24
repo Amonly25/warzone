@@ -18,9 +18,11 @@ public class EntityTargetListener implements Listener{
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTargeting(EntityTargetLivingEntityEvent e) {
         Entity targeted = e.getTarget();
+
         if (targeted == null) {
             return;
         }
@@ -32,31 +34,26 @@ public class EntityTargetListener implements Listener{
             return;
         }
     
-        if (entity instanceof Wither && isWarzoneBoss(entity)) {
-            handleWitherTargeting(e, targeted, entity);
+        if (isWarzoneBoss(entity)) {
+
+            Location warzone = plugin.getWarzoneManager().getWarzone().getLocation();
+            if (entity.getLocation().distance(warzone) > 32) {
+                entity.teleport(warzone);
+    
+            }
+            if (targeted instanceof Player) {
+                if (targeted.getLocation().distance(entity.getLocation()) > 32) {
+                    e.setCancelled(true);
+                }
+            }else e.setCancelled(true);   
         }
     }
     
     private boolean isWarzoneBoss(Entity entity) {
         if (entity instanceof Wither) {
-            Wither boss = plugin.getWarzoneManager().getWarzoneBoss();
+            Wither boss = plugin.getWarzoneManager().getWarzone().getWither();
             return boss != null && entity.equals(boss);
         }
         return false;
-    }
-    
-    private void handleWitherTargeting(EntityTargetLivingEntityEvent e, Entity targeted, Entity entity) {
-        Location warzone = plugin.getWarzoneManager().getLocation();
-        if (entity.getLocation().distance(warzone) > 32) {
-            entity.teleport(warzone);
-
-        }
-        if (targeted instanceof Player) {
-            if (targeted.getLocation().distance(entity.getLocation()) > 32) {
-                e.setCancelled(true);
-            }
-        } else {
-            e.setCancelled(true);
-        }
     }
 }

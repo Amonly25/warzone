@@ -13,6 +13,8 @@ import org.bukkit.entity.Wither;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.ar.askgaming.universalnotifier.UniversalNotifier;
+import com.ar.askgaming.universalnotifier.Managers.AlertManager.Alert;
 import com.ar.askgaming.warzone.WarzonePlugin;
 import com.ar.askgaming.warzone.CustomEvents.WarzoneStartEvent;
 
@@ -22,66 +24,80 @@ public class WarzoneManager extends BukkitRunnable{
 
     private WarzonePlugin plugin;
     private Warzone warzone;
-    private Location location;
 
     public WarzoneManager(WarzonePlugin main){
         plugin = main;
-        location = plugin.getConfig().getLocation("location");
 
         runTaskTimer(main, 0, 20*60);
+
+        warzone = new Warzone();
     }
-        //Methods
+
+    public enum WarzoneState {
+        IN_PROGRESS,
+        WAINTING,
+    }
+    private String getLang(String key, Player p){
+        return plugin.getLang().getFrom(key, p);
+    }
+
+    //#region start
     public void start(){
 
-        if (warzone != null){
-            return;
-        }
+        if (plugin.getServer().getPluginManager().getPlugin("UniversalNotifier") != null) {
+            UniversalNotifier notifier = UniversalNotifier.getInstance();
+            String start = plugin.getConfig().getString("notifier.start");
+            notifier.getNotificationManager().broadcastToAll(Alert.CUSTOM, start);
+        } 
 
-        warzone = new Warzone(plugin, location);
-        WarzoneStartEvent event = plugin.getWarzoneStartEvent();
-        event.setWarzone(warzone);
+        WarzoneStartEvent event = new WarzoneStartEvent(warzone);
         Bukkit.getPluginManager().callEvent(event);
 
-        plugin.getLang().langBroadcast("start.message");
-
         for (Player p : Bukkit.getOnlinePlayers()){
-            String title = plugin.getLang().getLang("start.title", p);
-            String subtitle = plugin.getLang().getLang("start.subtitle", p);
+            String title = getLang("start.title", p);
+            String subtitle = getLang("start.subtitle", p);
             p.sendTitle(title, subtitle, 20, 40, 20);
-            //p.playSound(p, Sound.ENTITY_WITHER_SPAWN, 10, 1);
             p.playSound(p.getLocation(), Sound.ENTITY_WITHER_SPAWN, 10, 1);
+            p.sendMessage(getLang("start.message", p));
         }
+
+        warzone.spawnBoss();
+        warzone.setState(WarzoneState.IN_PROGRESS);
 
     }
-
+    //#region stop
     public void stop(){
 
-        if (warzone == null){
+        if (warzone.getState() == WarzoneState.WAINTING) {
             return;
         }
-        
-        if (warzone.getBoss().getWhiter() != null && !warzone.getBoss().getWhiter().isDead()){
-            warzone.getBoss().getWhiter().remove();
+        String killer = warzone.getLastKiller();
+        if (plugin.getServer().getPluginManager().getPlugin("UniversalNotifier") != null) {
+            UniversalNotifier notifier = UniversalNotifier.getInstance();
+            String start = plugin.getConfig().getString("notifier.boss_killed").replace("%player%", killer != null ? killer : "Server");
+            notifier.getNotificationManager().broadcastToAll(Alert.CUSTOM, start);
+        } 
+        Wither wither = warzone.getWither();
+        if (wither != null && !wither.isDead()){
+            wither.remove();
         }
+
         for (Player p : Bukkit.getOnlinePlayers()){
-            String title = plugin.getLang().getLang("stop.title", p);
-            String subtitle = plugin.getLang().getLang("stop.subtitle", p);
+            String title = getLang("stop.title", p);
+            String subtitle = getLang("stop.subtitle", p);
             p.sendTitle(title, subtitle, 20, 40, 20);
+            p.playSound(p.getLocation(), Sound.ENTITY_WITHER_DEATH, 10, 1);
+            p.sendMessage(getLang("stop.message", p));
         }
 
         plugin.getConfig().set("last_warzone", System.currentTimeMillis() / 60000);
         plugin.saveConfig();
-        warzone.cancel();
-        warzone = null;
-        location.getWorld().setTime(0);
-        plugin.getLang().langBroadcast("stop.message");
-
     }
-
+    //#region warp
     public void warp(Player p){
 
         final int z = p.getLocation().getBlockZ(), x = p.getLocation().getBlockX();
-        p.sendMessage(plugin.getLang().getLang("warp",p));
+        p.sendMessage(getLang("warp",p));
 
         new BukkitRunnable() {		
             int count = 3;
@@ -90,13 +106,13 @@ public class WarzoneManager extends BukkitRunnable{
             public void run() {	      
                 
                 if (count == 0) {  
-                    p.sendMessage(plugin.getLang().getLang("enter",p));
-                    p.teleport(location);        		
+                    p.sendMessage(getLang("enter",p));
+                    p.teleport(warzone.getLocation());        		
                     cancel(); 
                     return;
                 }	    	    	                                    	    	                        
                 if (z != p.getLocation().getBlockZ() || x != p.getLocation().getBlockX()){
-                    p.sendMessage(plugin.getLang().getLang("cant_move",p));
+                    p.sendMessage(getLang("cant_move",p));
                     cancel();
                     return;
                 }
@@ -104,25 +120,19 @@ public class WarzoneManager extends BukkitRunnable{
             }
         }.runTaskTimer(plugin, 0L, 20L); 
     }
-    public Location getLocation() {
-        return location;
-    }
+
     public Warzone getWarzone() {
         return warzone;
     }
-    public void setLocation(Location location) {
-        plugin.getConfig().set("location", location);
-        plugin.saveConfig();
-        this.location = location;
-    }
+    //#region run
     @Override
     public void run() {
 
-        if (getWarzone() != null){
+        if (warzone.getState() == WarzoneState.IN_PROGRESS) {
             return;
         }
 
-        if (getLocation() == null){
+        if (warzone.getLocation() == null){
             return;
         }
         if (!plugin.getConfig().getBoolean("automatic_respawn", true)) {
@@ -138,6 +148,7 @@ public class WarzoneManager extends BukkitRunnable{
             start();          
         }
     }
+    //#region next
     public String getNext() {
         long actualTime = System.currentTimeMillis() / 60000;
         long lastWarzone = plugin.getConfig().getLong("last_warzone",0);
@@ -148,29 +159,13 @@ public class WarzoneManager extends BukkitRunnable{
 
         long hours = time / 60;
         long minutes = time % 60;
-        String text = plugin.getLang().getLang("next", null).replace("%hours%", String.valueOf(hours)).replace("%min%", String.valueOf(minutes));
+        String text = getLang("next", null).replace("%hours%", String.valueOf(hours)).replace("%min%", String.valueOf(minutes));
     
         return text;
 
     }
 
-    public Wither getWarzoneBoss() {
-        Warzone warzone = plugin.getWarzoneManager().getWarzone();
-        if (warzone == null) {
-            return null;
-        }
-
-        WarzoneBoss boss = warzone.getBoss();
-        if (boss == null) {
-            return null;
-        }
-
-        Wither witherBoss = boss.getWhiter();
-        if (witherBoss == null) {
-            return null;
-        }
-        return witherBoss;
-    }
+    //#region rewards
     public void proccesRewards(Player p, Location loc) {
 
         FileConfiguration cfg = plugin.getConfig();

@@ -7,5 +7,3 @@ softdepend: [PlaceholderAPI]
 commands:
   warzone:
     description: Manage warzone mode in your server.
-    permission: warzone.commands
-    permission-message: You do not have permission to use this command.

@@ -4,16 +4,21 @@
 
 #Dont touch the location from here, do it manually by commands.
 
-location: 
-
 name: "Warzone Boss"
 health: 1024
 damage_multiplier: 2
+location: 
 
 automatic_start: true
 cooldown_in_minutes: 1440
 remove_star_drop_from_boss: true
 remove_wither_skeleton_drops_on_warzone: true
+
+# Only if UniversalNotifier is installed
+# This is usefull to send notificaions via telegram, discord or email
+notifier:
+  start: "👾 The Warzone has started and the Wither has spawned!"
+  boss_killed: "👾 The Warzone has ended, %player% killed de wither boss."
 
 abilities:
   lightning:

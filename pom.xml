@@ -9,8 +9,7 @@
   <version>1.9.5</version>
 
   <name>warzone</name>
-  <!-- FIXME change it to the project's website -->
-  <url>https://www.askgaming.net</url>
+  <url>https://www.askgaming.com.ar</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,16 +17,8 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
-  <distributionManagement>
-      <repository>
-      <id>github</id>
-      <name>GitHub Amonly25 Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/Amonly25/warzone</url>
-      </repository>
-  </distributionManagement>
-
   <repositories>
-    <!-- This adds the Spigot Maven repository to the build -->
+
     <repository>
         <id>spigot-repo</id>
         <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -37,8 +28,14 @@
       <id>placeholderapi</id>
       <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
     </repository>
-  </repositories>
+
+    <repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
   
+  </repositories>
+
   <dependencies>
 
     <dependency>
@@ -54,6 +51,13 @@
       <version>2.11.6</version>
       <scope>provided</scope>
     </dependency> 
+
+    <dependency>
+        <groupId>com.github.Amonly25</groupId>
+        <artifactId>universalnotifier</artifactId>
+        <version>-SNAPSHOT</version>
+        <scope>provided</scope>
+    </dependency>
 
   </dependencies>
 

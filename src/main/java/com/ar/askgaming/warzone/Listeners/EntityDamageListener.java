@@ -1,6 +1,5 @@
 package com.ar.askgaming.warzone.Listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.ar.askgaming.warzone.WarzonePlugin;
 import com.ar.askgaming.warzone.Warzone.Warzone;
-import com.ar.askgaming.warzone.Warzone.WarzoneBoss;
+import com.ar.askgaming.warzone.Warzone.WarzoneManager.WarzoneState;
 
 public class EntityDamageListener implements Listener{
 
@@ -28,17 +27,12 @@ public class EntityDamageListener implements Listener{
         Entity entity = e.getEntity();
 
         Warzone warzone = plugin.getWarzoneManager().getWarzone();
-        if (warzone == null) {
+        if (warzone.getState() == WarzoneState.WAINTING) {
             return;
         }
 
-        WarzoneBoss boss = warzone.getBoss();
-        if (boss == null) {
-            return;
-        }
-
-        Wither witherBoss = boss.getWhiter();
-        if (witherBoss == null) {
+        Wither witherBoss = warzone.getWither();
+        if (witherBoss == null || !witherBoss.isValid()) {
             return;
         }
         if (damager instanceof WitherSkull){
@@ -48,7 +42,7 @@ public class EntityDamageListener implements Listener{
             }
         }
         if (entity.equals(witherBoss)) {
-            handleWitherBeingDamaged(e, boss);
+            handleWitherBeingDamaged(e);
         }
     }
 
@@ -66,18 +60,17 @@ public class EntityDamageListener implements Listener{
         }
     }
 
-    private void handleWitherBeingDamaged(EntityDamageByEntityEvent e, WarzoneBoss boss) {
+    private void handleWitherBeingDamaged(EntityDamageByEntityEvent e) {
         Entity damager = e.getDamager();
         if (damager instanceof Arrow) {
             Arrow arrow = (Arrow) damager;
             if (arrow.getShooter() instanceof Player) {
                 Player player = (Player) arrow.getShooter();
-                boss.createCounterAttack(e, player);
+                plugin.getWarzoneManager().getWarzone().createCounterAttack(e, player);
             }
         } else if (damager instanceof Player) {
             Player player = (Player) damager;
-            boss.createCounterAttack(e, player);
+            plugin.getWarzoneManager().getWarzone().createCounterAttack(e, player);
         }
     }
-
 }
