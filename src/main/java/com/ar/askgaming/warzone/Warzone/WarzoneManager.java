@@ -91,6 +91,7 @@ public class WarzoneManager extends BukkitRunnable{
         }
 
         plugin.getConfig().set("last_warzone", System.currentTimeMillis() / 60000);
+        warzone.setState(WarzoneState.WAINTING);
         plugin.saveConfig();
     }
     //#region warp

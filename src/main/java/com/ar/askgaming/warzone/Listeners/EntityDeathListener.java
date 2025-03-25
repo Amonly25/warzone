@@ -59,6 +59,7 @@ public class EntityDeathListener implements Listener{
                 warzone.setLastKiller(p.getName());
 
                 plugin.getWarzoneManager().proccesRewards(p, witherBoss.getLocation());
+                plugin.getWarzoneManager().stop();
             }
         }
     }
