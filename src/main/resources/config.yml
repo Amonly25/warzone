@@ -16,6 +16,7 @@ remove_wither_skeleton_drops_on_warzone: true
 
 # Only if UniversalNotifier is installed
 # This is usefull to send notificaions via telegram, discord or email
+# https://builtbybit.com/resources/universalnotifier-broadcast-alerts.62960/
 notifier:
   start: "👾 The Warzone has started and the Wither has spawned!"
   boss_killed: "👾 The Warzone has ended, %player% killed de wither boss."
